@@ -1,197 +1,375 @@
-/* ユグドラ幻想戦記 スタイルシート - Tactics Refined */
+/* ユグドラ幻想戦記 — 世界樹タイトルに合わせたUI */
 
-/* 基本設定 */
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body {
-  font-family: 'Arial', sans-serif;
-  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-  color: white;
-  overflow: hidden;
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
   user-select: none;
+  -webkit-user-drag: none;
+  touch-action: none;
 }
 
-/* 共通クラス */
+::selection { background: transparent; color: inherit; }
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: fixed;
+  overscroll-behavior: none;
+}
+
+body {
+  font-family: "Hiragino Sans", "Yu Gothic", "YuGothic", sans-serif;
+  background: #071018;
+  color: #f4efe4;
+}
+
 .screen {
-  position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+  position: fixed; inset: 0;
+  width: 100%; height: 100%;
   display: flex; flex-direction: column; justify-content: center; align-items: center;
   padding: 10px;
+  padding-top: calc(12px + env(safe-area-inset-top, 0px));
+  padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+  padding-left: calc(12px + env(safe-area-inset-left, 0px));
+  padding-right: calc(12px + env(safe-area-inset-right, 0px));
 }
 .hidden { display: none !important; }
-.btn, .action-btn {
-  background: linear-gradient(45deg, #ff6b35, #f7931e);
-  border: none; color: white; padding: 12px 24px;
-  font-size: 1.1em; font-weight: bold; border-radius: 25px;
-  cursor: pointer; transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-}
-.btn:hover, .action-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.4); }
-.btn:active, .action-btn:active { transform: translateY(0); }
-.action-btn:disabled { background: #666; cursor: not-allowed; opacity: 0.5; }
 
-/* タイトル画面 */
-#title-screen { background: linear-gradient(45deg, #4a148c, #7b1fa2, #9c27b0); text-align: center; }
-.title-logo { margin-bottom: 30px; filter: drop-shadow(0 0 10px rgba(255,255,255,0.3)); }
-.volume-control-title {
-    margin-top: 20px; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px;
-    display: flex; align-items: center; gap: 10px;
+.world-screen {
+  background:
+    linear-gradient(180deg, rgba(8, 18, 48, 0.28) 0%, rgba(8, 18, 48, 0.04) 32%, rgba(12, 10, 8, 0.18) 58%, rgba(28, 8, 4, 0.78) 100%),
+    url("images/title-bg.webp") center / cover no-repeat;
 }
 
-/* バトル画面ヘッダー周り */
-#battle-screen {
-  background: linear-gradient(135deg, #263238, #37474f); /* 背景を少し暗くして盤面を目立たせる */
-  justify-content: flex-start; padding-top: 10px;
+.dim-screen {
+  background:
+    linear-gradient(180deg, rgba(6, 12, 32, 0.78) 0%, rgba(10, 14, 28, 0.72) 45%, rgba(22, 8, 6, 0.82) 100%),
+    url("images/title-bg.webp") center / cover no-repeat;
 }
+
+.btn, .action-btn, .game-btn {
+  background: linear-gradient(180deg, #ffc56a 0%, #e85d04 52%, #8c1d00 100%);
+  border: 2px solid #f4d58a;
+  color: #fffaf0;
+  padding: 12px 24px;
+  font-size: 1.02em;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  border-radius: 999px;
+  cursor: pointer;
+  min-height: 56px;
+  transition: transform 0.08s ease, opacity 0.08s ease, filter 0.08s ease;
+  box-shadow: 0 0 18px rgba(255, 110, 30, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  touch-action: manipulation;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.55);
+}
+.btn:active, .action-btn:active, .game-btn:active,
+.game-btn.is-pressed { transform: scale(0.92); opacity: 0.88; }
+.action-btn:disabled, .game-btn:disabled {
+  background: #4a4450;
+  border-color: #6d6570;
+  cursor: not-allowed;
+  opacity: 0.45;
+  pointer-events: none;
+  box-shadow: none;
+}
+.btn.ghost, .game-btn.ghost {
+  background: rgba(10, 24, 56, 0.58);
+  border: 1px solid rgba(244, 213, 138, 0.72);
+  color: #eaf4ff;
+  box-shadow: 0 0 10px rgba(80, 160, 255, 0.18);
+}
+
+.title-screen {
+  justify-content: space-between;
+  text-align: center;
+  gap: 0;
+}
+.title-top {
+  width: 100%;
+  padding-top: 8px;
+}
+.title-kicker {
+  font-family: "Hiragino Mincho ProN", "Yu Mincho", "YuMincho", serif;
+  font-size: 0.78em;
+  letter-spacing: 0.28em;
+  color: #cfe8ff;
+  text-shadow: 0 0 10px rgba(120, 200, 255, 0.55);
+  margin-bottom: 8px;
+}
+.title-logo {
+  font-family: "Hiragino Mincho ProN", "Yu Mincho", "YuMincho", serif;
+  font-size: clamp(1.55rem, 7.2vw, 2.15rem);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: #fff6d2;
+  text-shadow:
+    0 0 14px rgba(255, 196, 80, 0.55),
+    0 2px 10px rgba(0, 0, 0, 0.85);
+}
+.title-sub {
+  margin-top: 8px;
+  font-size: 0.92em;
+  letter-spacing: 0.18em;
+  color: #9ad4ff;
+  text-shadow: 0 0 8px rgba(80, 170, 255, 0.45);
+}
+.title-spacer { flex: 1; min-height: 120px; width: 100%; }
+.title-actions {
+  width: min(340px, 92vw);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-bottom: 8px;
+}
+.title-blurb {
+  max-width: 320px;
+  margin: 0 auto 4px;
+  font-size: 0.82em;
+  line-height: 1.5;
+  color: #f3e6c8;
+  text-shadow: 0 1px 4px #000;
+}
+
+#battle-screen { justify-content: flex-start; }
 
 .battle-header {
-    width: 100%; max-width: 500px; display: flex; justify-content: space-between; align-items: center;
-    margin-bottom: 10px; padding: 0 10px;
+  width: 100%; max-width: 500px;
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 8px; padding: 0 6px;
 }
 
 .stage-badge {
-    background: linear-gradient(90deg, #d4af37, #f9a825);
-    padding: 5px 15px; border-radius: 15px; font-weight: bold; font-size: 1.1em;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+  background: linear-gradient(90deg, #7a4b12, #d4af37);
+  padding: 5px 15px;
+  border-radius: 15px;
+  font-weight: bold;
+  font-size: 0.95em;
+  border: 1px solid #f4d58a;
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.35);
 }
 
-/* 魔力ゲージ（旧音量UIの代替） */
 .summon-gauge-container {
-    display: flex; align-items: center; gap: 8px;
-    background: rgba(0,0,0,0.5); padding: 5px 12px; border-radius: 20px;
-    border: 1px solid rgba(0,229,255,0.3);
+  display: flex; align-items: center; gap: 8px;
+  background: rgba(8, 20, 48, 0.62);
+  padding: 5px 12px;
+  border-radius: 20px;
+  border: 1px solid rgba(154, 212, 255, 0.45);
 }
-.gauge-label { font-size: 0.8em; color: #00e5ff; font-weight: bold; }
-.crystals { display: flex; gap: 4px; }
+.gauge-label { font-size: 0.8em; color: #9ad4ff; font-weight: bold; }
+.crystals { display: flex; gap: 6px; }
 .crystal {
-    width: 15px; height: 15px; transform: rotate(45deg);
-    border: 1px solid #fff; background: rgba(255,255,255,0.1);
-    transition: all 0.3s ease; box-shadow: 0 0 5px rgba(0,0,0,0.5);
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  border: 1px solid #cfe8ff;
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 0 3px rgba(154, 212, 255, 0.12);
 }
-.crystal.on { background: #00e5ff; box-shadow: 0 0 10px #00e5ff; border-color: #00e5ff; }
+.crystal.on {
+  background: radial-gradient(circle at 35% 30%, #fff, #7ad0ff 45%, #1e6ad6);
+  box-shadow: 0 0 12px #7ad0ff;
+  border-color: #e8f6ff;
+}
 
 .mini-btn {
-    background: none; border: none; font-size: 1.5em; cursor: pointer; padding: 5px;
+  background: rgba(10, 24, 56, 0.55);
+  border: 1px solid rgba(244, 213, 138, 0.55);
+  font-size: 1.2em;
+  cursor: pointer;
+  padding: 5px;
+  min-height: 48px;
+  min-width: 48px;
+  color: #fff6d2;
+  border-radius: 50%;
+}
+.mute-fab {
+  position: fixed;
+  top: calc(10px + env(safe-area-inset-top, 0px));
+  right: calc(10px + env(safe-area-inset-right, 0px));
+  z-index: 400;
 }
 
-/* バトル情報 */
 .game-info {
-  width: 100%; max-width: 400px; margin-bottom: 5px;
-  display: flex; justify-content: space-between; gap: 10px;
+  width: 100%; max-width: 400px; margin-bottom: 4px;
+  display: flex; justify-content: space-between; gap: 8px;
 }
-.turn-info, .player-status {
-  background: rgba(0,0,0,0.6); padding: 5px 10px; border-radius: 5px; font-size: 0.9em;
+.turn-info, .player-status, .equip-hud {
+  background: rgba(8, 16, 40, 0.62);
+  border: 1px solid rgba(244, 213, 138, 0.28);
+  padding: 5px 10px;
+  border-radius: 8px;
+  font-size: 0.8em;
 }
+.player-status { display: flex; gap: 8px; flex-wrap: wrap; }
 
-/* バトルマップ - 配色変更で視認性向上 */
+.equip-hud {
+  width: 100%; max-width: 400px;
+  display: flex; justify-content: space-between; gap: 8px;
+  margin-bottom: 4px;
+}
+#equip-name { color: #ffd54f; }
+
 .battle-map {
-  display: grid; grid-template-columns: repeat(6, 1fr); grid-template-rows: repeat(6, 1fr);
-  gap: 3px; width: 95vw; height: 95vw; max-width: 360px; max-height: 360px;
-  margin: 10px 0; background: rgba(0,0,0,0.2);
-  padding: 5px; border-radius: 5px; position: relative;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: repeat(6, 1fr);
+  gap: 3px;
+  width: 92vw; height: 92vw;
+  max-width: 360px; max-height: 360px;
+  margin: 6px 0;
+  background: rgba(6, 10, 22, 0.55);
+  padding: 6px;
+  border-radius: 8px;
+  position: relative;
+  overflow: visible;
+  border: 1px solid rgba(244, 213, 138, 0.28);
 }
 
 .map-cell {
-  background: #795548; /* 土色に変更 (緑ユニットとのコントラスト確保) */
-  border: 1px solid #5d4037; /* 枠線を少し濃く */
+  background: #2a3348;
+  border: 1px solid #1a2233;
   border-radius: 4px;
   display: flex; justify-content: center; align-items: center;
-  cursor: pointer; position: relative;
-  box-shadow: inset 0 0 5px rgba(0,0,0,0.3);
+  cursor: pointer;
+  position: relative;
 }
-/* グリッドを見やすく */
-.map-cell:nth-child(even) { background: #6d4c41; } 
-
+.map-cell:nth-child(even) { background: #323c54; }
 .map-cell.movable {
-  background: rgba(33, 150, 243, 0.6) !important; /* 青ハイライト */
-  border: 2px solid #2196f3;
+  background: rgba(80, 170, 255, 0.42) !important;
+  border: 2px solid #9ad4ff;
   animation: pulse 1.5s infinite;
 }
 .map-cell.attackable {
-  background: rgba(244, 67, 54, 0.6) !important; /* 赤ハイライト */
-  border: 2px solid #f44336;
+  background: rgba(232, 93, 4, 0.5) !important;
+  border: 2px solid #ffb347;
   animation: pulse 0.8s infinite;
 }
-.map-cell.selected {
-  background: rgba(255, 235, 59, 0.5) !important;
-  border: 2px solid #ffeb3b;
-}
 
-/* アクションボタンエリア */
 .action-buttons {
-    width: 100%; max-width: 400px; display: flex; justify-content: center;
-    pointer-events: none; /* コンテナ自体はクリック透過 */
-    position: relative; height: 60px;
+  width: 100%; max-width: 400px;
+  display: flex; justify-content: center; gap: 10px;
+  position: relative;
+  min-height: 56px;
 }
-.summon-btn {
-    pointer-events: auto; /* ボタンはクリック可能 */
-    width: 100%; max-width: 200px;
-}
+.summon-btn, #equip-btn, #attack-btn { min-width: 96px; }
 
-/* ターン終了ボタン（右下へ移動） */
 .end-turn-btn {
-    position: fixed; bottom: 20px; right: 20px;
-    width: 80px; height: 80px; border-radius: 50%;
-    background: #ef5350; border: 4px solid #b71c1c;
-    color: white; font-weight: bold; font-size: 0.9em;
-    display: flex; justify-content: center; align-items: center; text-align: center;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.5); z-index: 100;
-    transition: transform 0.2s;
-    line-height: 1.2;
+  position: fixed;
+  bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  right: 16px;
+  width: 72px; height: 72px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #ffb347, #e85d04 55%, #7a1400);
+  border: 3px solid #f4d58a;
+  color: #fffaf0;
+  font-weight: bold;
+  font-size: 0.85em;
+  display: flex; justify-content: center; align-items: center;
+  text-align: center;
+  box-shadow: 0 0 18px rgba(255, 90, 20, 0.55);
+  z-index: 100;
+  padding: 0;
 }
-.end-turn-btn:active { transform: scale(0.95); }
 
-/* ガイドメッセージ */
 .guide-message {
-    position: fixed; bottom: 120px;
-    background: rgba(0,0,0,0.7); color: #fff; padding: 5px 15px; border-radius: 20px;
-    font-size: 0.9em; pointer-events: none;
-    animation: fadeIn 0.5s;
+  position: fixed;
+  bottom: calc(100px + env(safe-area-inset-bottom, 0px));
+  background: rgba(8, 16, 40, 0.78);
+  border: 1px solid rgba(244, 213, 138, 0.35);
+  color: #fff6d2;
+  padding: 5px 15px;
+  border-radius: 20px;
+  font-size: 0.85em;
+  pointer-events: none;
 }
 
-/* SVG調整 */
-.map-cell svg { width: 90%; height: 90%; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.5)); }
+.map-cell svg { width: 90%; height: 90%; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.5)); pointer-events: none; }
+.map-cell.darkknight svg { filter: drop-shadow(0 0 7px #ea80fc); }
+.map-cell.darklord svg { width: 108%; height: 108%; filter: drop-shadow(0 0 9px #e040fb); }
+.map-cell.rootguard svg { filter: drop-shadow(0 0 6px #ff8f00); }
+.map-cell.rootwarden svg { filter: drop-shadow(0 0 6px #aed581); }
+.map-cell.boss-origin { overflow: visible; z-index: 4; }
+.map-cell.boss-origin svg {
+  width: 190%;
+  height: 190%;
+  transform: translate(22%, 22%);
+  filter: drop-shadow(0 0 12px #ff6d00);
+}
+.map-cell.boss-footprint {
+  background: rgba(90, 28, 8, 0.62) !important;
+  box-shadow: inset 0 0 14px rgba(255, 109, 0, 0.4);
+}
+.battle-map.map-castle {
+  background: rgba(28, 6, 36, 0.78);
+  border-color: rgba(224, 64, 251, 0.45);
+}
+.battle-map.map-roots {
+  background: rgba(36, 12, 6, 0.82);
+  border-color: rgba(255, 141, 36, 0.5);
+}
 
 @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-/* その他の既存スタイルは維持 */
-#story-screen { background: linear-gradient(135deg, #2c1810, #5d4037); }
-#action-screen { background: linear-gradient(135deg, #1a237e, #3f51b5); }
-#result-screen { background: linear-gradient(135deg, #4a148c, #6a1b9a); }
-#action-canvas { border: 2px solid #fff; border-radius: 10px; background: #000; margin-bottom: 20px; }
+#action-screen { background: linear-gradient(135deg, #0b1a3a, #1c2748); }
+#action-canvas { border: 2px solid #f4d58a; border-radius: 10px; background: #000; margin-bottom: 20px; }
 .mobile-controls { display: flex; justify-content: space-between; width: 100%; max-width: 400px; }
 .move-pad { display: flex; flex-direction: column; align-items: center; }
 .move-row { display: flex; margin-top: 5px; }
-.move-btn, .action-key { width: 50px; height: 50px; margin: 2px; background: rgba(255,255,255,0.2); border: 2px solid rgba(255,255,255,0.3); color: white; border-radius: 10px; }
+.move-btn, .action-key {
+  width: 50px; height: 50px; margin: 2px;
+  background: rgba(10, 24, 56, 0.55);
+  border: 2px solid rgba(244, 213, 138, 0.45);
+  color: white;
+  border-radius: 10px;
+}
 
-/* 追加：ダメージポップアップのアニメーション */
+.story-content { max-width: 360px; padding: 16px; }
+.story-text {
+  background: rgba(8, 16, 40, 0.7);
+  border: 1px solid rgba(244, 213, 138, 0.35);
+  padding: 16px;
+  border-radius: 10px;
+  line-height: 1.7;
+  margin-bottom: 16px;
+  color: #f4efe4;
+}
+
+h2, #result-title {
+  font-family: "Hiragino Mincho ProN", "Yu Mincho", "YuMincho", serif;
+  letter-spacing: 0.12em;
+  color: #fff6d2;
+  text-shadow: 0 0 10px rgba(255, 196, 80, 0.4);
+}
+
+.result-buttons { display: flex; flex-direction: column; gap: 8px; width: min(320px, 90vw); margin-top: 12px; }
+.result-icon { margin-bottom: 8px; filter: drop-shadow(0 0 8px rgba(255, 196, 80, 0.35)); }
+
 .damage-popup {
   position: absolute;
   color: #fff;
-  font-size: 1.5em;
+  font-size: 1.4em;
   font-weight: bold;
-  text-shadow: 2px 2px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+  text-shadow: 2px 2px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
   pointer-events: none;
   animation: floatUp 0.8s ease-out forwards;
   z-index: 1000;
 }
-
-.damage-popup.critical {
-  color: #ffeb3b;
-  font-size: 2.2em;
-  text-shadow: 2px 2px 0 #d50000; /* 赤い縁取り */
-}
+.damage-popup.critical { color: #ffeb3b; font-size: 2em; }
+.damage-popup.adv { color: #9ad4ff; }
+.damage-popup.gold { color: #ffd54f; font-size: 1.1em; }
 
 @keyframes floatUp {
   0% { transform: translateY(0) scale(1); opacity: 1; }
-  50% { transform: translateY(-20px) scale(1.2); opacity: 1; }
+  50% { transform: translateY(-20px) scale(1.15); opacity: 1; }
   100% { transform: translateY(-40px) scale(1); opacity: 0; }
 }
 
-/* 追加：画面シェイク用クラス */
-.shake {
-  animation: shake 0.3s cubic-bezier(.36,.07,.19,.97) both;
-}
-
+.shake { animation: shake 0.3s cubic-bezier(.36,.07,.19,.97) both; }
 @keyframes shake {
   10%, 90% { transform: translate3d(-2px, 0, 0); }
   20%, 80% { transform: translate3d(4px, 0, 0); }
@@ -199,12 +377,61 @@ body {
   40%, 60% { transform: translate3d(6px, 0, 0); }
 }
 
-/* 既存の修正：HPバーをもっと見やすく */
 .hp-bar-bg {
   position: absolute; bottom: 2px; left: 10%; width: 80%; height: 4px;
-  background: #333; border-radius: 2px;
+  background: #1a1420; border-radius: 2px;
 }
 .hp-bar-fill {
-  height: 100%; background: #00e676; border-radius: 2px;
-  transition: width 0.2s;
+  height: 100%; background: linear-gradient(90deg, #e85d04, #ffd54f); border-radius: 2px;
 }
+
+.sheet {
+  position: fixed; inset: 0; background: rgba(4, 8, 20, 0.62);
+  display: flex; align-items: flex-end; justify-content: center; z-index: 200;
+}
+.sheet-panel {
+  width: 100%; max-width: 420px; max-height: 70vh; overflow-y: auto;
+  background: rgba(10, 18, 42, 0.94);
+  border-top: 1px solid #f4d58a;
+  padding: 16px;
+  padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  border-radius: 16px 16px 0 0;
+  touch-action: pan-y;
+}
+.sheet-panel p { margin-bottom: 8px; color: #fff6d2; }
+
+.shop-list, .owned-list, .album-list {
+  width: min(360px, 92vw);
+  max-height: 36vh;
+  overflow-y: auto;
+  touch-action: pan-y;
+  -webkit-overflow-scrolling: touch;
+  margin: 8px 0;
+}
+.shop-gold-line { color: #ffd54f; font-weight: bold; }
+.shop-hint { font-size: 0.85em; opacity: 0.9; margin: 4px 0 8px; text-align: center; color: #eaf4ff; }
+.shop-group { font-size: 0.9em; margin: 8px 0 4px; color: #9ad4ff; }
+.shop-item, .owned-item {
+  width: 100%;
+  display: block;
+  text-align: left;
+  border-radius: 12px;
+  margin-bottom: 8px;
+  background: rgba(8, 16, 40, 0.62);
+}
+.shop-item-name { font-size: 0.95em; }
+.shop-item-meta { font-size: 0.75em; font-weight: normal; opacity: 0.85; }
+.owned-item.equipped { outline: 2px solid #f4d58a; }
+
+.album-list { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; max-height: 55vh; }
+.album-card {
+  background: rgba(8, 16, 40, 0.62);
+  border: 1px solid rgba(244, 213, 138, 0.22);
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 0.85em;
+}
+.album-card.on { outline: 1px solid #f4d58a; }
+.album-note { font-size: 0.75em; opacity: 0.8; margin-top: 4px; }
+
+#shop-screen, #album-screen { justify-content: flex-start; overflow: hidden; }
