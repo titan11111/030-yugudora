@@ -496,6 +496,46 @@ function triggerScreenShake() {
   screen.classList.add('shake');
 }
 
+async function playMechBeamAttack(mech, target, damage, signal) {
+  const mapEl = $('battle-map');
+  const sourceCell = cellAt(mech.x, mech.y);
+  const targetCell = cellAt(target.x, target.y);
+  if (!sourceCell || !targetCell) return;
+  const mapRect = mapEl.getBoundingClientRect();
+  const sourceRect = sourceCell.getBoundingClientRect();
+  const targetRect = targetCell.getBoundingClientRect();
+  const sx = sourceRect.left - mapRect.left + sourceRect.width / 2;
+  const sy = sourceRect.top - mapRect.top + sourceRect.height / 2;
+  const tx = targetRect.left - mapRect.left + targetRect.width / 2;
+  const ty = targetRect.top - mapRect.top + targetRect.height / 2;
+  const dx = tx - sx;
+  const dy = ty - sy;
+  const beam = document.createElement('div');
+  beam.className = 'annihilation-beam';
+  beam.style.left = `${sx}px`;
+  beam.style.top = `${sy}px`;
+  beam.style.width = `${Math.hypot(dx, dy)}px`;
+  beam.style.transform = `rotate(${Math.atan2(dy, dx)}rad)`;
+  const impact = document.createElement('div');
+  impact.className = 'annihilation-impact';
+  impact.style.left = `${tx}px`;
+  impact.style.top = `${ty}px`;
+  mapEl.append(beam, impact);
+  setGuide('巨神兵、殲滅ビーム充填……ビビビビ');
+  synth.playMechBeam();
+  if (navigator.vibrate) navigator.vibrate([35, 25, 45, 25, 70, 30, 140]);
+  try {
+    await waitMs(620, signal);
+    triggerScreenShake();
+    showDamagePopup(target.x, target.y, `-${damage}`, 'mech-damage');
+    setGuide(`殲滅ビーム直撃　${damage} DAMAGE`);
+    await waitMs(260, signal);
+  } finally {
+    beam.remove();
+    impact.remove();
+  }
+}
+
 function calcDamage(enemy) {
   const w = currentWeaponStats();
   const roll = Math.floor(Math.random() * 5);
@@ -913,16 +953,15 @@ function updatePlayerStatusSafe() {
 async function startMechTurn(signal) {
   game.mechTurn = true;
   updateTurnDisplay();
-  setGuide('機兵の攻撃');
-  await waitMs(600, signal);
+  setGuide('巨神兵、攻撃対象を走査中');
+  await waitMs(420, signal);
   for (const m of game.units.mechs) {
     if (m.hp <= 0) continue;
     const enemies = game.units.enemies.filter((e) => e.hp > 0);
     if (!enemies.length) break;
     const target = enemies[Math.floor(Math.random() * enemies.length)];
+    await playMechBeamAttack(m, target, m.attack, signal);
     target.hp -= m.attack;
-    synth.play('attack');
-    showDamagePopup(target.x, target.y, m.attack);
     if (target.hp <= 0) {
       armory.addGold(target.gold);
       showDamagePopup(target.x, target.y, `+${target.gold}G`, 'gold');
@@ -949,13 +988,20 @@ function startSummon() {
   }
   if (!empties.length) return;
   const p = empties[Math.floor(Math.random() * empties.length)];
-  game.units.mechs.push({ x: p.x, y: p.y, hp: 80, maxHp: 80, attack: 14, name: '機兵' });
+  game.units.mechs.push({
+    x: p.x,
+    y: p.y,
+    hp: 120,
+    maxHp: 120,
+    attack: 28 + game.currentStage * 6,
+    name: '巨神兵リヴァント'
+  });
   game.summonGauge = 0;
   game.summonReadyPending = false;
   synth.play('levelup');
   createBattleMap();
   updateTurnDisplay();
-  setGuide('機兵を召喚した');
+  setGuide('巨神兵リヴァント、殲滅形態で召喚');
 }
 
 function updateMuteButton() {

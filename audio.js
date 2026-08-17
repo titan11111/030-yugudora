@@ -168,6 +168,19 @@ const synth = {
     this.tone(freq, this.ctx.currentTime, dur, type, gain || 0.05, this.seGain);
   },
 
+  playMechBeam() {
+    if (this.muted || !this.ctx) return;
+    this.unlock();
+    const now = this.ctx.currentTime;
+    // 「ビ・ビ・ビ・ビ」の充填音から低い放射音へ接続
+    [360, 430, 510, 620, 760].forEach((freq, index) => {
+      this.tone(freq, now + index * 0.065, 0.07, 'square', 0.055 + index * 0.006, this.seGain);
+    });
+    this.tone(118, now + 0.29, 0.52, 'sawtooth', 0.12, this.seGain);
+    this.tone(880, now + 0.3, 0.22, 'square', 0.06, this.seGain);
+    this.noiseHit(now + 0.3, 0.18, 0.08);
+  },
+
   play(kind) {
     if (this.muted) return;
     this.unlock();
