@@ -380,11 +380,12 @@ function enemy(x, y, hp, type, name, extras = {}) {
 const STAGE_DATA = {
   1: {
     name: '第1面 - 森の入口',
-    story: '世界樹の森で最初の敵と遭遇した。素手では厳しい。ゴールドを貯めて武器を買おう。',
+    story: '最初の実戦だ。弱った敵で移動と攻撃を覚え、3体倒して機兵を呼ぼう。',
     enemies: [
-      enemy(2, 3, 26, 'goblin', 'ゴブリン', { atk: 7, gold: 10, tribe: 'beast' }),
-      enemy(4, 4, 26, 'goblin', 'ゴブリン', { atk: 7, gold: 10, tribe: 'beast' }),
-      enemy(3, 1, 40, 'orc', 'オーク隊長', { atk: 10, gold: 22, tribe: 'beast' })
+      enemy(2, 3, 18, 'goblin', 'ゴブリン', { atk: 7, gold: 10, tribe: 'beast' }),
+      enemy(4, 4, 18, 'goblin', 'ゴブリン', { atk: 7, gold: 10, tribe: 'beast' }),
+      enemy(5, 2, 18, 'goblin', 'ゴブリン斥候', { atk: 6, gold: 8, tribe: 'beast' }),
+      enemy(3, 1, 28, 'orc', 'オーク隊長', { atk: 10, gold: 22, tribe: 'beast' })
     ]
   },
   2: {
@@ -393,6 +394,7 @@ const STAGE_DATA = {
     enemies: [
       enemy(1, 3, 28, 'skeleton', 'スケルトン', { atk: 8, gold: 14, tribe: 'undead' }),
       enemy(4, 3, 28, 'skeleton', 'スケルトン', { atk: 8, gold: 14, tribe: 'undead' }),
+      enemy(5, 1, 24, 'skeleton', '崩れた骸骨', { atk: 7, gold: 10, tribe: 'undead' }),
       enemy(3, 1, 44, 'wizard', 'ネクロマンサー', { atk: 11, gold: 28, tribe: 'magic' })
     ]
   },
@@ -402,6 +404,7 @@ const STAGE_DATA = {
     enemies: [
       enemy(2, 4, 32, 'goblin', '洞窟ゴブリン', { atk: 9, gold: 12, tribe: 'beast' }),
       enemy(4, 3, 46, 'orc', 'オーク戦士', { atk: 12, gold: 24, tribe: 'beast' }),
+      enemy(5, 1, 30, 'goblin', '暗がりの斥候', { atk: 9, gold: 12, tribe: 'beast' }),
       enemy(1, 1, 52, 'dragon', 'ワイバーン', { atk: 13, gold: 36, tribe: 'dragon' })
     ]
   },
@@ -411,6 +414,7 @@ const STAGE_DATA = {
     enemies: [
       enemy(0, 4, 34, 'skeleton', '氷の衛兵', { atk: 10, gold: 16, tribe: 'undead' }),
       enemy(4, 4, 34, 'skeleton', '氷の衛兵', { atk: 10, gold: 16, tribe: 'undead' }),
+      enemy(5, 1, 30, 'skeleton', '凍った従者', { atk: 9, gold: 14, tribe: 'undead' }),
       enemy(2, 2, 58, 'wizard', '氷の術者', { atk: 14, gold: 34, tribe: 'magic' })
     ]
   },
@@ -420,6 +424,7 @@ const STAGE_DATA = {
     enemies: [
       enemy(2, 4, 38, 'goblin', '火ゴブリン', { atk: 11, gold: 14, tribe: 'beast' }),
       enemy(0, 3, 38, 'orc', '火のオーク', { atk: 12, gold: 20, tribe: 'beast' }),
+      enemy(5, 3, 34, 'goblin', '火種運び', { atk: 10, gold: 14, tribe: 'beast' }),
       enemy(3, 1, 66, 'dragon', 'フレイムドレイク', { atk: 15, gold: 48, tribe: 'dragon' })
     ]
   },
@@ -429,6 +434,7 @@ const STAGE_DATA = {
     enemies: [
       enemy(2, 3, 48, 'phoenix', 'ストームバード', { atk: 14, gold: 30, tribe: 'dragon' }),
       enemy(4, 3, 48, 'phoenix', 'ストームバード', { atk: 14, gold: 30, tribe: 'dragon' }),
+      enemy(0, 2, 42, 'phoenix', '風切り鳥', { atk: 13, gold: 24, tribe: 'dragon' }),
       enemy(2, 0, 70, 'wizard', '雷鳴の術者', { atk: 16, gold: 40, tribe: 'magic' })
     ]
   },
@@ -438,6 +444,7 @@ const STAGE_DATA = {
     enemies: [
       enemy(2, 4, 44, 'orc', '沼オーク', { atk: 14, gold: 24, tribe: 'beast' }),
       enemy(4, 3, 50, 'demon', '沼の使い', { atk: 15, gold: 28, tribe: 'magic' }),
+      enemy(5, 1, 40, 'demon', '毒沼の影', { atk: 13, gold: 22, tribe: 'magic' }),
       enemy(1, 1, 62, 'demon', 'ポイズンロード', { atk: 17, gold: 44, tribe: 'magic' })
     ]
   },
@@ -447,6 +454,7 @@ const STAGE_DATA = {
     enemies: [
       enemy(0, 4, 46, 'lich', '偽りの使徒', { atk: 15, gold: 26, tribe: 'undead' }),
       enemy(4, 3, 46, 'lich', '偽りの使徒', { atk: 15, gold: 26, tribe: 'undead' }),
+      enemy(5, 1, 42, 'skeleton', '塔の残響', { atk: 14, gold: 22, tribe: 'undead' }),
       enemy(2, 1, 78, 'lich', '光の亡者', { atk: 18, gold: 52, tribe: 'undead' })
     ]
   },
@@ -456,6 +464,7 @@ const STAGE_DATA = {
     enemies: [
       enemy(2, 3, 128, 'darkknight', '闇騎士', { atk: 24, gold: 40, tribe: 'magic' }),
       enemy(4, 4, 128, 'darkknight', '闇騎士', { atk: 24, gold: 40, tribe: 'magic' }),
+      enemy(0, 2, 92, 'darkknight', '闇の尖兵', { atk: 21, gold: 34, tribe: 'magic' }),
       enemy(2, 0, 188, 'darklord', 'ダークロード', { atk: 30, gold: 88, tribe: 'magic' })
     ]
   },
@@ -465,6 +474,7 @@ const STAGE_DATA = {
     enemies: [
       enemy(0, 4, 145, 'rootguard', '根の番兵', { atk: 26, gold: 40, tribe: 'beast' }),
       enemy(4, 4, 145, 'rootwarden', '根の番人', { atk: 26, gold: 40, tribe: 'undead' }),
+      enemy(5, 2, 110, 'rootguard', '根の先兵', { atk: 23, gold: 34, tribe: 'beast' }),
       enemy(2, 1, 280, 'yggbehemoth', 'ベヒーモス', { atk: 36, gold: 130, tribe: 'dragon', size: 2 })
     ]
   }

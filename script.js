@@ -124,6 +124,7 @@ const game = {
   actionMode: 'none',
   musicEnabled: true,
   mechTurn: false,
+  summonReadyPending: false,
   turnAbort: null,
   shopReturn: 'next-stage',
   albumFrom: 'title',
@@ -236,9 +237,11 @@ function updateTurnDisplay() {
   if (game.summonGauge >= 3) {
     btn.disabled = false;
     btn.textContent = '機兵召喚';
+    btn.classList.add('ready');
   } else {
     btn.disabled = true;
     btn.textContent = `魔力 ${game.summonGauge}/3`;
+    btn.classList.remove('ready');
   }
   updateHud();
 }
@@ -423,7 +426,14 @@ function beginPlayerTurn() {
   game.actionMode = 'none';
   updateTurnDisplay();
   createBattleMap();
-  setGuide('手前の敵をタップすると近づいて攻撃。3体まとめては殴れません');
+  if (game.summonReadyPending || game.summonGauge >= 3) {
+    game.summonReadyPending = false;
+    setGuide('召喚準備完了。機兵召喚を押して残敵へ投入');
+    synth.play('levelup');
+    if (navigator.vibrate) navigator.vibrate([40, 30, 80]);
+  } else {
+    setGuide('手前の敵をタップすると近づいて攻撃。3体まとめては殴れません');
+  }
 }
 
 function approachThenMaybeAttack(enemy, tapX, tapY) {
@@ -567,6 +577,7 @@ function loadStageData() {
   game.playerTurn = true;
   game.mechTurn = false;
   game.summonGauge = 0;
+  game.summonReadyPending = false;
   game.actionMode = 'none';
   game.hasMoved = false;
   setGuide('手前の敵をタップすると近づいて攻撃');
@@ -826,7 +837,9 @@ function resolvePlayerAttack(enemy, x, y) {
   }
 
   if (enemy.hp <= 0) {
+    const wasReady = game.summonGauge >= 3;
     game.summonGauge = Math.min(game.summonGauge + 1, 3);
+    if (!wasReady && game.summonGauge >= 3) game.summonReadyPending = true;
     armory.addGold(enemy.gold);
     gainExperience(20);
     synth.play('gold');
@@ -938,6 +951,7 @@ function startSummon() {
   const p = empties[Math.floor(Math.random() * empties.length)];
   game.units.mechs.push({ x: p.x, y: p.y, hp: 80, maxHp: 80, attack: 14, name: '機兵' });
   game.summonGauge = 0;
+  game.summonReadyPending = false;
   synth.play('levelup');
   createBattleMap();
   updateTurnDisplay();

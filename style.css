@@ -258,6 +258,16 @@ body {
 }
 .summon-btn, #equip-btn, #attack-btn { min-width: 96px; }
 
+.summon-btn.ready {
+  animation: summon-ready-pulse 0.75s ease-in-out infinite alternate;
+  box-shadow: 0 0 10px #5ee7ff, 0 0 22px rgba(94, 231, 255, 0.65);
+}
+
+@keyframes summon-ready-pulse {
+  from { transform: scale(1); filter: brightness(1); }
+  to { transform: scale(1.06); filter: brightness(1.35); }
+}
+
 .end-turn-btn {
   position: fixed;
   bottom: calc(16px + env(safe-area-inset-bottom, 0px));
